@@ -17,4 +17,4 @@ news <- readLines(con)
 close(con)
 
 # save the data to an .RData file
-save.image("en_US.RData")
+save(blogs, news, twitter, file="en_US.RData")
