@@ -10,6 +10,19 @@ output:
 # Abstract
 This report analyses some of the basic features of the Swiftkey data.
 
+# Introduction
+
+Swiftkey, keyboard, tm package
+
+Considerations
+
+remove numbers
+remove punctuation
+remove emoticons
+lower case (default)
+no stemming
+
+
 
 # Data
 The dataset consist of ...
