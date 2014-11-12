@@ -47,3 +47,26 @@ vc_twitter %>%
 
 tdm_twitter %>%
   findFreqTerms( lowfreq=1000 )
+
+
+# n-grams
+
+# load the RWeka library
+library(RWeka)
+
+# construct bi-gram tokanizer and tri-gram tokanizer
+BiGramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2, max = 2))
+TriGramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 3, max = 3))
+
+# find bigrams in blogs
+tdm_bi_blogs <- TermDocumentMatrix(vc_blogs, control = list(tokenize = BiGramTokenizer))
+tdm_tri_blogs <- TermDocumentMatrix(vc_blogs, control = list(tokenize = TriGramTokenizer))
+
+# list bi-grams with at least 500 occurances
+tdm_bi_blogs %>%
+  findFreqTerms( lowfreq=500 )
+
+# list tri-grams with at least 50 occurances
+tdm_tri_blogs %>%
+  findFreqTerms( lowfreq=50 )
+
