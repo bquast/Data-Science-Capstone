@@ -11,4 +11,6 @@
 # data files
 Coursera-SwiftKey.zip
 final
-en_US.RData
+blogs.RData
+news.RData
+twitter.RData
