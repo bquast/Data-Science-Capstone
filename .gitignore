@@ -7,10 +7,12 @@
 # RStudio files
 .Rproj.user/
 .Rproj.user
-
 # data files
 Coursera-SwiftKey.zip
 final
 blogs.RData
 news.RData
 twitter.RData
+tdm_bi_news.RData
+tdm_tri_news.RData
+vc_news.RData

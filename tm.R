@@ -13,7 +13,7 @@ library(tm)
 
 # load create the corpus for each source
 # blogs
-sample_blogs %>%
+blogs %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus -> vc_blogs
@@ -25,19 +25,19 @@ tdm_blogs %>%
   findFreqTerms( lowfreq=1000 )
 
 # news
-sample_news %>%
+news %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus -> vc_news
 
 vc_news %>%
-  TermDocumentMatrix( control = list(removePunctuation=TRUE, removeNumbers=TRUE) ) -> tdm_news
+  TermDocumentMatrix( control = list(removePunctuation=TRUE, removeNumbers=TRUE, removeSparseTerms=0.8 ) ) -> tdm_news
 
 tdm_news %>%
-  findFreqTerms( lowfreq=1000 )
+  findFreqTerms( lowfreq=100000 )
 
 # twitter
-sample_twitter %>%
+twitter %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus -> vc_twitter
@@ -64,9 +64,32 @@ tdm_tri_blogs <- TermDocumentMatrix(vc_blogs, control = list(tokenize = TriGramT
 
 # list bi-grams with at least 500 occurances
 tdm_bi_blogs %>%
-  findFreqTerms( lowfreq=500 )
+  findFreqTerms( lowfreq=500 ) -> bi_blogs
 
 # list tri-grams with at least 50 occurances
 tdm_tri_blogs %>%
-  findFreqTerms( lowfreq=50 )
+  findFreqTerms( lowfreq=50 ) -> tri_blogs
 
+# find bigrams in news
+tdm_bi_news <- TermDocumentMatrix(vc_news, control = list(tokenize = BiGramTokenizer))
+tdm_tri_news <- TermDocumentMatrix(vc_news, control = list(tokenize = TriGramTokenizer))
+
+# list bi-grams with at least 500 occurances
+tdm_bi_news %>%
+  findFreqTerms( lowfreq=500 ) -> bi_news
+
+# list tri-grams with at least 50 occurances
+tdm_tri_news %>%
+  findFreqTerms( lowfreq=50 ) -> tri_news
+
+# find bigrams in twitter
+tdm_bi_twitter <- TermDocumentMatrix(vc_twitter, control = list(tokenize = BiGramTokenizer))
+tdm_tri_twitter <- TermDocumentMatrix(vc_twitter, control = list(tokenize = TriGramTokenizer))
+
+# list bi-grams with at least 500 occurances
+tdm_bi_twitter %>%
+  findFreqTerms( lowfreq=500 ) -> bi_twitter
+
+# list tri-grams with at least 50 occurances
+tdm_tri_twitter %>%
+  findFreqTerms( lowfreq=50 ) -> tri_twitter
