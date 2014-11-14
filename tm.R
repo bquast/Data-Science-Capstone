@@ -13,7 +13,7 @@ library(tm)
 
 # load create the corpus for each source
 # blogs
-blogs %>%
+sample_blogs %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus -> vc_blogs
