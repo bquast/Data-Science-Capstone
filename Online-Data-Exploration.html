@@ -83,16 +83,12 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <p>The data is presented as a <a href="http://en.wikipedia.org/wiki/Zip_(file_format)">ZIP compressed archive</a>, which is freely downloadable from <a href="https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip">here</a>.</p>
 <pre class="r"><code># specify the source and destination of the download
 destination_file &lt;- &quot;Coursera-SwiftKey.zip&quot;
-source_file &lt;- &quot;https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip&quot;
+source_file &lt;- &quot;http://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip&quot;
 
 # execute the download
-download.file(source_file, destination_file, method=&quot;wget&quot;)</code></pre>
-<pre><code>## Warning: running command 'wget
-## &quot;https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip&quot;
-## -O &quot;Coursera-SwiftKey.zip&quot;' had status 127</code></pre>
-<pre><code>## Warning in download.file(source_file, destination_file, method = &quot;wget&quot;):
-## download had nonzero exit status</code></pre>
-<pre class="r"><code># extract the files from the zip file
+download.file(source_file, destination_file)
+
+# extract the files from the zip file
 unzip(destination_file)</code></pre>
 <p>Inspect the unzipped files</p>
 <pre class="r"><code># find out which files where unzipped

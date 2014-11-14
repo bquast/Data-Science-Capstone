@@ -37,24 +37,11 @@ The data is presented as a [ZIP compressed archive](http://en.wikipedia.org/wiki
 ```r
 # specify the source and destination of the download
 destination_file <- "Coursera-SwiftKey.zip"
-source_file <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+source_file <- "http://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
 
 # execute the download
-download.file(source_file, destination_file, method="wget")
-```
+download.file(source_file, destination_file)
 
-```
-## Warning: running command 'wget
-## "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
-## -O "Coursera-SwiftKey.zip"' had status 127
-```
-
-```
-## Warning in download.file(source_file, destination_file, method = "wget"):
-## download had nonzero exit status
-```
-
-```r
 # extract the files from the zip file
 unzip(destination_file)
 ```
