@@ -220,7 +220,7 @@ qplot(   words_blogs )
 ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
-![](./Online-Data-Exploration_files/figure-html/unnamed-chunk-7-1.png) 
+![](./Online-Text-Exploration_files/figure-html/unnamed-chunk-7-1.png) 
 
 Next we analys the **news** corpus.
 
@@ -242,7 +242,7 @@ qplot(   words_news )
 ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
-![](./Online-Data-Exploration_files/figure-html/unnamed-chunk-8-1.png) 
+![](./Online-Text-Exploration_files/figure-html/unnamed-chunk-8-1.png) 
 
 Finally we analyse the **twitter** corpus.
 
@@ -264,7 +264,7 @@ qplot(   words_twitter )
 ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
-![](./Online-Data-Exploration_files/figure-html/unnamed-chunk-9-1.png) 
+![](./Online-Text-Exploration_files/figure-html/unnamed-chunk-9-1.png) 
 
 # Conclusions
 We analyse three corpora of US english text. The file sizes are around 200 MegaBytes (MBs) per file.
