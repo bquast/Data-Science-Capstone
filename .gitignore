@@ -12,7 +12,10 @@ Coursera-SwiftKey.zip
 final
 blogs.RData
 news.RData
-twitter.RData
+
+tdm_news
 tdm_bi_news.RData
 tdm_tri_news.RData
 vc_news.RData
+
+twitter.RData
