@@ -8,7 +8,11 @@ file.info("final/en_US/en_US.news.txt")$size    / 1024^2
 file.info("final/en_US/en_US.twitter.txt")$size / 1024^2
 
 # number of lines
-load("en_US.RData")
+load("blogs.RData")
+load("news.RData")
+load("twitter.RData")
+
+# number of lines
 length(blogs)
 length(news)
 length(twitter)
