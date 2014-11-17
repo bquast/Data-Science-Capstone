@@ -21,6 +21,7 @@ news %>%
 vc_news %>%
   TermDocumentMatrix( control = list(removePunctuation=TRUE,
                                      removeNumbers=TRUE,
+                                     stopwords = TRUE,
                                      removeSparseTerms=0.8
                                      )
                       ) -> tdm_news
@@ -30,7 +31,7 @@ tdm_news %>%
 
 # save tdm and free space
 tdm_news %>%
-  save( file = "tdm_news" )
+  save( file = "tdm_news.RData" )
 
 rm( tdm_news )
 gc()
@@ -53,6 +54,7 @@ TriGramTokenizer <- function(x) NGramTokenizer(x,
 vc_news %>%
   TermDocumentMatrix(control = list(removePunctuation=TRUE,
                                     removeNumbers=TRUE,
+                                    stopwords = TRUE,
                                     removeSparseTerms=0.8,
                                     tokenize = BiGramTokenizer
                                     )
@@ -75,8 +77,9 @@ gc()
 vc_news %>%
   TermDocumentMatrix(control = list(removePunctuation=TRUE,
                                     removeNumbers=TRUE,
+                                    stopwords = TRUE,
                                     removeSparseTerms=0.8,
-                                    tokenize = BiGramTokenizer
+                                    tokenize = TriGramTokenizer
                                     )
                      ) -> tdm_tri_news
 
