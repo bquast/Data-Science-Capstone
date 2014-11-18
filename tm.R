@@ -37,12 +37,12 @@ vc_all %>%
                                      removeNumbers=TRUE,
                                      stopwords = TRUE,
                                      removeSparseTerms=0.8  )
-  ) -> tdm_all
+  ) -> tdm_sparse
   
-tdm_all %>%
-  save( file = "tdm_all.RData" )
+tdm_sparse %>%
+  save( file = "tdm_sparse.RData" )
 
-rm(tdm_all)
+rm(tdm_sparse)
 gc()
 
 # n-grams
