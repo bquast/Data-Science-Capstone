@@ -1,26 +1,22 @@
 # History files
 .Rhistory
-
 # profile file
 .RProfile
-
 # Example code in package build process
 *-Ex.R
-
 # R data files from past sessions
 .Rdata
-
 # RStudio files
 .Rproj.user/
 .Rproj.user
-
 # data files
 Coursera-SwiftKey.zip
 final
 blogs.RData
 news.RData
+twitter.RData
+sample.RData
 tdm_news.RData
 tdm_bi_news.RData
 tdm_tri_news.RData
 vc_news.RData
-twitter.RData
