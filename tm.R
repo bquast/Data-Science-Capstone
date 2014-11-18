@@ -18,36 +18,32 @@ sample_blogs %>%
   DataframeSource() %>%
   VCorpus -> vc_blogs
 
-vc_blogs %>%
-  TermDocumentMatrix( control = list(removePunctuation=TRUE, removeNumbers=TRUE) ) -> tdm_blogs
-
-tdm_blogs %>%
-  findFreqTerms( lowfreq=1000 )
-
 # news
-news %>%
+sample_news %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus -> vc_news
 
-vc_news %>%
-  TermDocumentMatrix( control = list(removePunctuation=TRUE, removeNumbers=TRUE, removeSparseTerms=0.8 ) ) -> tdm_news
-
-tdm_news %>%
-  findFreqTerms( lowfreq=100000 )
-
 # twitter
-twitter %>%
+sample_twitter %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus -> vc_twitter
 
-vc_twitter %>%
-  TermDocumentMatrix( control = list(removePunctuation=TRUE, removeNumbers=TRUE) ) -> tdm_twitter
+vc_all <- c(vc_blogs, vc_news, vc_twitter)
 
-tdm_twitter %>%
-  findFreqTerms( lowfreq=1000 )
+vc_all %>%
+  TermDocumentMatrix( control = list(removePunctuation=TRUE,
+                                     removeNumbers=TRUE,
+                                     stopwords = TRUE,
+                                     removeSparseTerms=0.8  )
+  ) -> tdm_all
+  
+tdm_all %>%
+  save( file = "tdm_all.RData" )
 
+rm(tdm_all)
+gc()
 
 # n-grams
 
@@ -59,37 +55,41 @@ BiGramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2, max = 2))
 TriGramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 3, max = 3))
 
 # find bigrams in blogs
-tdm_bi_blogs <- TermDocumentMatrix(vc_blogs, control = list(tokenize = BiGramTokenizer))
-tdm_tri_blogs <- TermDocumentMatrix(vc_blogs, control = list(tokenize = TriGramTokenizer))
+vc_all %>%
+  TermDocumentMatrix( control = list(removePunctuation=TRUE,
+                                     removeNumbers=TRUE,
+                                     stopwords = TRUE,
+                                     removeSparseTerms=0.8,
+                                     tokenize = BiGramTokenizer)
+  ) -> tdm_bi_sparse
 
-# list bi-grams with at least 500 occurances
-tdm_bi_blogs %>%
-  findFreqTerms( lowfreq=500 ) -> bi_blogs
+tdm_bi_sparse %>%
+  save( file = "tdm_bi_sparse.RData" )
 
-# list tri-grams with at least 50 occurances
-tdm_tri_blogs %>%
-  findFreqTerms( lowfreq=50 ) -> tri_blogs
+# list bi-grams with at least 5000 occurances
+tdm_bi_sparse %>%
+  findFreqTerms( lowfreq=2000 ) -> bi_grams_2000
+bi_grams_2000
 
-# find bigrams in news
-tdm_bi_news <- TermDocumentMatrix(vc_news, control = list(tokenize = BiGramTokenizer))
-tdm_tri_news <- TermDocumentMatrix(vc_news, control = list(tokenize = TriGramTokenizer))
+rm(tdm_bi_sparse)
+gc()
 
-# list bi-grams with at least 500 occurances
-tdm_bi_news %>%
-  findFreqTerms( lowfreq=500 ) -> bi_news
+vc_all %>%
+  TermDocumentMatrix( control = list(removePunctuation=TRUE,
+                                     removeNumbers=TRUE,
+                                     stopwords = TRUE,
+                                     removeSparseTerms=0.8,
+                                     tokenize = TriGramTokenizer)
+  ) -> tdm_tri_sparse
 
-# list tri-grams with at least 50 occurances
-tdm_tri_news %>%
-  findFreqTerms( lowfreq=50 ) -> tri_news
-
-# find bigrams in twitter
-tdm_bi_twitter <- TermDocumentMatrix(vc_twitter, control = list(tokenize = BiGramTokenizer))
-tdm_tri_twitter <- TermDocumentMatrix(vc_twitter, control = list(tokenize = TriGramTokenizer))
-
-# list bi-grams with at least 500 occurances
-tdm_bi_twitter %>%
-  findFreqTerms( lowfreq=500 ) -> bi_twitter
 
 # list tri-grams with at least 50 occurances
-tdm_tri_twitter %>%
-  findFreqTerms( lowfreq=50 ) -> tri_twitter
+tdm_tri_sparse %>%
+  findFreqTerms( lowfreq=500 ) -> tri_grams_500
+tri_grams_500
+
+tdm_tri_sparse %>%
+  save( file = "tdm_tri_sparse.RData" )
+
+rm(tdm_tri_sparse)
+gc()
