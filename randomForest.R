@@ -50,8 +50,16 @@ random.forest3 <- train(x = tri_grams_500[,-3],
                         trControl=trainControl(method="cv")
 )
 
+# save the model
+random.forest %>%
+  save( file = "random.forest.RData" )
 
 # test the model
+tri_grams_500[,-3]
+predict(random.forest, newdata=tri_grams_500[,-3])
+tri_grams_500[,3]
+
+
 # confusion matrix
 confusionMatrix(predict(random.forest,
                         newdata=tri_grams_500[,-3]),
