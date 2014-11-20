@@ -16,19 +16,22 @@ library(tm)
 sample_blogs %>%
   data.frame() %>%
   DataframeSource() %>%
-  VCorpus -> vc_blogs
+  VCorpus %>%
+  tm_map( stripWhitespace ) -> vc_blogs
 
 # news
 sample_news %>%
   data.frame() %>%
   DataframeSource() %>%
-  VCorpus -> vc_news
+  VCorpus %>%
+  tm_map( stripWhitespace ) -> vc_news
 
 # twitter
 sample_twitter %>%
   data.frame() %>%
   DataframeSource() %>%
-  VCorpus -> vc_twitter
+  VCorpus %>%
+  tm_map( stripWhitespace ) -> vc_twitter
 
 vc_all <- c(vc_blogs, vc_news, vc_twitter)
 
@@ -37,8 +40,15 @@ vc_all %>%
                                      removeNumbers=TRUE,
                                      stopwords = TRUE,
                                      removeSparseTerms=0.8  )
-  ) -> tdm_sparse
-  
+                      ) -> tdm_sparse
+
+vc_all %>%
+  DocumentTermMatrix( control = list(removePunctuation=TRUE,
+                                     removeNumbers=TRUE,
+                                     stopwords = TRUE,
+                                     removeSparseTerms=0.8  )
+  ) -> dtm_sparse
+
 tdm_sparse %>%
   save( file = "tdm_sparse.RData" )
 
@@ -85,8 +95,8 @@ vc_all %>%
 
 # list tri-grams with at least 50 occurances
 tdm_tri_sparse %>%
-  findFreqTerms( lowfreq=500 ) -> tri_grams_500
-tri_grams_500
+  findFreqTerms( lowfreq=1 ) -> tri_grams
+tri_grams
 
 tdm_tri_sparse %>%
   save( file = "tdm_tri_sparse.RData" )
