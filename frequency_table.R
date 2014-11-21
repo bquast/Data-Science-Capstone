@@ -48,7 +48,8 @@ zin_freq_table
 
 zin_freq_table %>%
   strsplit(split=" ") %>%
-  as.data.frame %>%
-  t -> zin_df
+  data.frame %>%
+  t %>%
+  data.frame( stringsAsFactors = TRUE ) -> zin_df
 rownames(zin_df) <- NULL
 zin_df
