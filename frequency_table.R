@@ -17,39 +17,63 @@ max_words <- 3L
 trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = min_words, max = max_words))
 
 # sample data
-zin <- "dit is een paar lange nederlandse zin met niet al de veel de zelfde woorden maar wel ten minste een paar"
+sample_news %>%
+  data.frame() %>%
+  DataframeSource() %>%
+  VCorpus %>%
+  tm_map( stripWhitespace ) -> vc_news
 
-# frequency
-zin %>%
-  strsplit( split = " ") %>%
-  table -> woorden
-woorden
+# frequency unigrams
+news_corpus %>%
+  TermDocumentMatrix( control = list( removePunctuation = TRUE,
+                                      removeNumbers = TRUE)
+                      ) -> tdm_unigram
+
+tdm_unigram %>%
+  as.matrix %>%
+  rowSums -> unigram_freq
 
 # create corpus
-zin %>%
+vc_news %>%
   VectorSource %>%
-  VCorpus -> zin_corpus
-inspect(zin_corpus)
+  VCorpus -> news_corpus
+inspect(news_corpus)
 
 # bigram Term-Document Matrix
-zin_corpus %>%
-  TermDocumentMatrix( control = list(tokenize = trigram_token) ) -> zin_tdm
+news_corpus %>%
+  TermDocumentMatrix( control = list( removePunctuation = TRUE,
+                                      removeNumbers = TRUE,
+                                      tokenize = trigram_token)
+                      ) -> tdm_trigram
 
 # aggregate frequencies
-zin_tdm %>%
+tdm_trigram %>%
   as.matrix %>%
-  rowSums -> zin_freq_table
+  rowSums -> freq_table
+
+# normalise by unigram count
+df2 <- sweep(df, 2, unigram_freq, "/")
 
 # repeat by frequency
-zin_freq_table %>%
+freq_table %>%
   names %>%
-  rep( times = zin_freq_table ) -> zin_freq_table
-zin_freq_table
+  rep( times = freq_table ) -> freq_table
 
-zin_freq_table %>%
-  strsplit(split=" ") %>%
-  data.frame %>%
-  t %>%
-  data.frame( stringsAsFactors = TRUE ) -> zin_df
-rownames(zin_df) <- NULL
-zin_df
+freq_table %>%
+  strsplit(split=" ") -> freq_table
+
+freq_table <- do.call(rbind, Filter(lengthIs(3), freq_table))
+
+freq_table %>%
+  data.frame( stringsAsFactors = FALSE ) -> df
+tail(df,100)
+
+
+
+
+df %>%
+  data.frame( stringsAsFactors = TRUE ) -> df
+rownames(df) <- NULL
+df
+
+
