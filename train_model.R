@@ -5,4 +5,5 @@
 # load the libraries
 library(tm)
 library(e1071)
-library(RTextTools)
+library(klaR)
+
