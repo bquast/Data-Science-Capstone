@@ -5,6 +5,7 @@
 # load the libraries
 library(tm)
 library(RWeka)
+library(data.table)
 library(dplyr)
 
 # ngram tokaniser
@@ -16,7 +17,7 @@ max_words <- 3L
 trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = min_words, max = max_words))
 
 # sample data
-zin <- "dit is een lange nederlandse zin met niet al de veel de zelfde woorden maar wel ten minste een paar"
+zin <- "dit is een paar lange nederlandse zin met niet al de veel de zelfde woorden maar wel ten minste een paar"
 
 # frequency
 zin %>%
@@ -33,3 +34,16 @@ inspect(zin_corpus)
 # bigram Term-Document Matrix
 zin_corpus %>%
   TermDocumentMatrix( control = list(tokenize = bigram_token) ) -> zin_tdm
+
+# aggregate frequencies
+zin_tdm %>%
+  as.matrix %>%
+  rowSums -> zin_freq_table
+
+# tabulate
+data.table(words     = names(zin_freq_table),
+           frequency = zin_freq_table
+           ) -> zin_freq_table
+
+# repeat by frequency
+rep.table <- with(zin_freq_table, rep(words, frequency) )
