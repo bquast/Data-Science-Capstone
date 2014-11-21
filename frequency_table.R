@@ -40,10 +40,8 @@ zin_tdm %>%
   as.matrix %>%
   rowSums -> zin_freq_table
 
-# tabulate
-data.table(words     = names(zin_freq_table),
-           frequency = zin_freq_table
-           ) -> zin_freq_table
-
 # repeat by frequency
-rep.table <- with(zin_freq_table, rep(words, frequency) )
+zin_freq_table %>%
+  names %>%
+  rep( times = zin_freq_table )
+
