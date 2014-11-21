@@ -33,7 +33,7 @@ inspect(zin_corpus)
 
 # bigram Term-Document Matrix
 zin_corpus %>%
-  TermDocumentMatrix( control = list(tokenize = bigram_token) ) -> zin_tdm
+  TermDocumentMatrix( control = list(tokenize = trigram_token) ) -> zin_tdm
 
 # aggregate frequencies
 zin_tdm %>%
