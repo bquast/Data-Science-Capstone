@@ -60,6 +60,6 @@ klar.cf <- confusionMatrix(predict(classifier,
 
 ######
 # now on tdm
-transp <- as.matrix(t(tdm_sparse))
 classifier <- naiveBayes(as.matrix(tdm_sparse), tdm_sparse$dimnames$Terms)
-
+classifier
+klar.classif <- NaiveBayes(as.matrix(tdm_sparse), tdm_sparse$dimnames$Terms)
