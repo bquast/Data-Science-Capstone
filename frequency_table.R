@@ -5,7 +5,6 @@
 # load the libraries
 library(tm)
 library(RWeka)
-library(data.table)
 library(dplyr)
 
 # load the sample data
@@ -30,17 +29,21 @@ sample_news %>%
 # frequency unigrams
 vc_news %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
-                                      removeNumbers = TRUE)
+                                      removeNumbers = TRUE,
+                                      wordLengths = c( 1, Inf) )
                       ) -> tdm_unigram
 
 tdm_unigram %>%
   as.matrix %>%
   rowSums -> freq_unigram
 
+news_levels <- unique(tdm_unigram$dimnames$Terms)
+
 # bigram Term-Document Matrix
 vc_news %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE,
+                                      wordLengths = c( 1, Inf),
                                       tokenize = trigram_token)
                       ) -> tdm_trigram
 
@@ -65,6 +68,8 @@ freq_trigram <- do.call(rbind,
                         )
 
 # transform to data.frame encode as factors
-freq_trigram %>%
-  data.frame( stringsAsFactors = TRUE ) -> df_trigram
-head(df_trigram)
+X1 <- factor(freq_trigram[,1], levels = news_levels)
+X2 <- factor(freq_trigram[,2], levels = news_levels)
+Y <- factor(freq_trigram[,3], levels = news_levels)
+
+df_trigram <- data.frame(X1, X2, Y)
