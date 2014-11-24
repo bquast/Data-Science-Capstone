@@ -20,7 +20,7 @@ final
 blogs.RData
 news.RData
 twitter.RData
-sample.RData
-tdm_sparse.RData
-tdm_bi_sparse.RData
-tdm_tri_sparse.RData
+sample_data.RData
+tdm_unigram.RData
+tdm_bigram.RData
+tdm_trigram.RData

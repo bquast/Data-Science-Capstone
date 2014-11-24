@@ -13,4 +13,4 @@ sample_news    <- sample(news, 100)
 sample_twitter <- sample(twitter, 100)
 
 # save samples
-save(sample_blogs, sample_news, sample_twitter, file= "sample.RData")
+save(sample_blogs, sample_news, sample_twitter, file= "sample_data.RData")
