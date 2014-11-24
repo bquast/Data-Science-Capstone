@@ -1,4 +1,4 @@
-# Sample.R
+# sample_data.R
 # Bastiaan Quast
 # bquast@gmail.com
 

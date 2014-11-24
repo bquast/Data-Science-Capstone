@@ -1,4 +1,4 @@
-# Download.R
+# download_data.R
 # Bastiaan Quast
 # bquast@gmail.com
 #-------------------------

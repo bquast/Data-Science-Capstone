@@ -1,4 +1,4 @@
-# Summarise.R
+# summarise_data.R
 # Bastiaan Quast
 # bquast@gmail.com
 

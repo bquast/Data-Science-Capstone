@@ -1,4 +1,4 @@
-# predict.R
+# predict_word.R
 # Bastiaan Quast
 # bquast@gmail.com
 

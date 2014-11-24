@@ -1,4 +1,4 @@
-# frequency_table.R
+# construct_frequency_table.R
 # Bastiaan Quast
 # bquast@gmail.com
 

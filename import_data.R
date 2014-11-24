@@ -1,4 +1,4 @@
-# Import.R
+# import_data.R
 # Bastiaan Quast
 # bquast@gmail.com
 # ------------------
