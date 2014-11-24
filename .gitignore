@@ -24,3 +24,4 @@ sample_data.RData
 tdm_unigram.RData
 tdm_bigram.RData
 tdm_trigram.RData
+tri_naiveBayes.RData
