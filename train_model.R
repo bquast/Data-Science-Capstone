@@ -7,28 +7,28 @@ library(caret)
 library(e1071)
 library(klaR)
 
-e1071.model <- naiveBayes( x = df[,-3], y = df[,3] )
+e1071.model <- naiveBayes( X3~. ,
+                           df_trigram )
 e1071.model
 
-predict(e1071.model, df[,-3])
-predict(e1071.model, "paar")
+predict(e1071.model, df_trigram[,-3])
+predict(e1071.model, "http")
 
 
 e1071.cf <- confusionMatrix(predict(e1071.model,
-                                   newdata=df[,-3]),
-                           df[,3]
+                                   newdata=df_trigram[,-3]),
+                           df_trigram[,3]
                            )
-e1071.cf
+head(e1071.cf$table, 10)[,1:10]
 
 
-klar.model <- NaiveBayes( x = df[,-3], grouping = df[,3] )
-klar.model
+klar.model <- NaiveBayes( x = df_trigram[,-3], grouping = df_trigram[,3] )
+head(klar.cf$table, 10)[,1:10]
 
-predict(klar.model, grouping = df[,-3] )
+predict(klar.model, grouping = df_trigram[,-3] )
 predict(klar.model, grouping = "a" )
 
-klar.cf <- confusionMatrix(predict(klar.model,
-                                   grouping = df[,-3])$class,
-                           df[,3]
-                           )
+klar.cf <- confusionMatrix( predict(klar.model,
+                                    grouping = df_trigram[,-3])$class,
+                            df_trigram[,3] )
 klar.cf

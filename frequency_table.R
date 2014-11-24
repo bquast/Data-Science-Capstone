@@ -8,13 +8,17 @@ library(RWeka)
 library(data.table)
 library(dplyr)
 
+# load the sample data
+load("sample.RData")
+
 # ngram tokaniser
-min_words <- 2L
-max_words <- 2L
-bigram_token <- function(x) NGramTokenizer(x, Weka_control(min = min_words, max = max_words))
-min_words <- 3L
-max_words <- 3L
-trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = min_words, max = max_words))
+n <- 2L
+bigram_token <- function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
+n <- 3L
+trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
+
+# check length function
+lengthIs <- function(n) function(x) length(x)==n
 
 # sample data
 sample_news %>%
@@ -24,23 +28,17 @@ sample_news %>%
   tm_map( stripWhitespace ) -> vc_news
 
 # frequency unigrams
-news_corpus %>%
+vc_news %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE)
                       ) -> tdm_unigram
 
 tdm_unigram %>%
   as.matrix %>%
-  rowSums -> unigram_freq
-
-# create corpus
-vc_news %>%
-  VectorSource %>%
-  VCorpus -> news_corpus
-inspect(news_corpus)
+  rowSums -> freq_unigram
 
 # bigram Term-Document Matrix
-news_corpus %>%
+vc_news %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE,
                                       tokenize = trigram_token)
@@ -49,31 +47,24 @@ news_corpus %>%
 # aggregate frequencies
 tdm_trigram %>%
   as.matrix %>%
-  rowSums -> freq_table
-
-# normalise by unigram count
-df2 <- sweep(df, 2, unigram_freq, "/")
+  rowSums -> freq_trigram
 
 # repeat by frequency
-freq_table %>%
+freq_trigram %>%
   names %>%
-  rep( times = freq_table ) -> freq_table
+  rep( times = freq_trigram ) -> freq_trigram
 
-freq_table %>%
-  strsplit(split=" ") -> freq_table
+# split the trigram into three columns
+freq_trigram %>%
+  strsplit(split=" ") -> freq_trigram
 
-freq_table <- do.call(rbind, Filter(lengthIs(3), freq_table))
+# filter out those of less than three columns
+freq_trigram <- do.call(rbind, 
+                        Filter( lengthIs(3),
+                                freq_trigram )
+                        )
 
-freq_table %>%
-  data.frame( stringsAsFactors = FALSE ) -> df
-tail(df,100)
-
-
-
-
-df %>%
-  data.frame( stringsAsFactors = TRUE ) -> df
-rownames(df) <- NULL
-df
-
-
+# transform to data.frame encode as factors
+freq_trigram %>%
+  data.frame( stringsAsFactors = TRUE ) -> df_trigram
+head(df_trigram)
