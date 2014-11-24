@@ -3,8 +3,7 @@ title: "Online Text Exploration"
 author: "Bastiaan Quast"
 date: "Monday, November 10, 2014"
 output:
-  html_document:
-    keep_md: yes
+  md_document
 bibliography: bibliography.bib
 ---
 
@@ -33,7 +32,7 @@ we finally present conclusions and give references.
 
 For our analysis we use the R computing environment [@R], as well as the libraries **stringi** [@stringi] and **ggplot2** [@ggplot2].
 In order to make the code more readable we use the pipe operator from the **magrittr** library [@magrittr].
-This report is compiled using the **rmarkdown ** library [@rmarkdown].
+This report is compiled using the **rmarkdown ** library [@rmarkdown] and [@knitr].
 Finally during writing we used the RStudio IDE [@RStudio].
 
 # Data
