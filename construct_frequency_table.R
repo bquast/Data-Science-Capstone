@@ -19,15 +19,29 @@ trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
 # check length function
 lengthIs <- function(n) function(x) length(x)==n
 
-# sample data
+# contruct single corpus from sample data
+sample_blogs %>%
+  data.frame() %>%
+  DataframeSource() %>%
+  VCorpus %>%
+  tm_map( stripWhitespace ) -> vc_blogs
+
 sample_news %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus %>%
   tm_map( stripWhitespace ) -> vc_news
 
+sample_twitter %>%
+  data.frame() %>%
+  DataframeSource() %>%
+  VCorpus %>%
+  tm_map( stripWhitespace ) -> vc_twitter
+
+vc_all <- c(vc_blogs, vc_news, vc_twitter)
+
 # frequency unigrams
-vc_news %>%
+vc_all %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE,
                                       wordLengths = c( 1, Inf) )
@@ -37,10 +51,10 @@ tdm_unigram %>%
   as.matrix %>%
   rowSums -> freq_unigram
 
-news_levels <- unique(tdm_unigram$dimnames$Terms)
+unigram_levels <- unique(tdm_unigram$dimnames$Terms)
 
-# bigram Term-Document Matrix
-vc_news %>%
+# trigram Term-Document Matrix
+vc_all %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE,
                                       wordLengths = c( 1, Inf),
@@ -68,8 +82,9 @@ freq_trigram <- do.call(rbind,
                         )
 
 # transform to data.frame encode as factors
-X1 <- factor(freq_trigram[,1], levels = news_levels)
-X2 <- factor(freq_trigram[,2], levels = news_levels)
-Y <- factor(freq_trigram[,3], levels = news_levels)
+df_trigram <- data.frame(X1 = factor(freq_trigram[,1], levels = unigram_levels),
+                         X2 = factor(freq_trigram[,2], levels = unigram_levels),
+                         Y  = factor(freq_trigram[,3], levels = unigram_levels) )
 
-df_trigram <- data.frame(X1, X2, Y)
+# save data frame
+save( df_trigram, file = "df_trigram.RData")
