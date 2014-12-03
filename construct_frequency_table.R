@@ -6,6 +6,7 @@
 library(tm)
 library(RWeka)
 library(dplyr)
+library(magrittr)
 
 # load the sample data
 load("sample_data.RData")
@@ -20,48 +21,54 @@ trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
 length_is <- function(n) function(x) length(x)==n
 
 # contruct single corpus from sample data
-sample_blogs %>%
+vc_blogs <-
+  sample_blogs %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus %>%
-  tm_map( stripWhitespace ) -> vc_blogs
+  tm_map( stripWhitespace )
 
-sample_news %>%
+vc_news <-
+  sample_news %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus %>%
-  tm_map( stripWhitespace ) -> vc_news
+  tm_map( stripWhitespace )
 
-sample_twitter %>%
+vc_twitter <-
+  sample_twitter %>%
   data.frame() %>%
   DataframeSource() %>%
   VCorpus %>%
-  tm_map( stripWhitespace ) -> vc_twitter
+  tm_map( stripWhitespace )
 
 vc_all <- c(vc_blogs, vc_news, vc_twitter)
 
 # frequency unigrams
-vc_all %>%
+tdm_unigram <-
+  vc_all %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE,
                                       wordLengths = c( 1, Inf) )
-                      ) -> tdm_unigram
+                      )
 
-tdm_unigram %>%
+freq_unigram <- 
+  tdm_unigram %>%
   as.matrix %>%
-  rowSums -> freq_unigram
+  rowSums
 
 # write all unigrams to a list
 # in order to create uniform levels of factors
 unigram_levels <- unique(tdm_unigram$dimnames$Terms)
 
 # trigram Term-Document Matrix
-vc_all %>%
+tdm_trigram <-
+  vc_all %>%
   TermDocumentMatrix( control = list( removePunctuation = TRUE,
                                       removeNumbers = TRUE,
                                       wordLengths = c( 1, Inf),
                                       tokenize = trigram_token)
-                      ) -> tdm_trigram
+                      )
 
 # aggregate frequencies
 tdm_trigram %>%
@@ -69,13 +76,13 @@ tdm_trigram %>%
   rowSums -> freq_trigram
 
 # repeat by frequency
-freq_trigram %>%
+freq_trigram %<>%
   names %>%
-  rep( times = freq_trigram ) -> freq_trigram
+  rep( times = freq_trigram )
 
 # split the trigram into three columns
-freq_trigram %>%
-  strsplit(split=" ") -> freq_trigram
+freq_trigram %<>%
+  strsplit(split=" ")
 
 # filter out those of less than three columns
 freq_trigram <- do.call(rbind, 
