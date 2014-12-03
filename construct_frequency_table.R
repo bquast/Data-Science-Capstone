@@ -8,7 +8,7 @@ library(RWeka)
 library(dplyr)
 
 # load the sample data
-load("sample.RData")
+load("sample_data.RData")
 
 # ngram tokaniser
 n <- 2L
@@ -17,7 +17,7 @@ n <- 3L
 trigram_token <- function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
 
 # check length function
-lengthIs <- function(n) function(x) length(x)==n
+length_is <- function(n) function(x) length(x)==n
 
 # contruct single corpus from sample data
 sample_blogs %>%
@@ -51,6 +51,8 @@ tdm_unigram %>%
   as.matrix %>%
   rowSums -> freq_unigram
 
+# write all unigrams to a list
+# in order to create uniform levels of factors
 unigram_levels <- unique(tdm_unigram$dimnames$Terms)
 
 # trigram Term-Document Matrix
@@ -77,7 +79,7 @@ freq_trigram %>%
 
 # filter out those of less than three columns
 freq_trigram <- do.call(rbind, 
-                        Filter( lengthIs(3),
+                        Filter( length_is(3),
                                 freq_trigram )
                         )
 
@@ -87,4 +89,4 @@ df_trigram <- data.frame(X1 = factor(freq_trigram[,1], levels = unigram_levels),
                          Y  = factor(freq_trigram[,3], levels = unigram_levels) )
 
 # save data frame
-save( df_trigram, file = "df_trigram.RData")
+save( df_trigram, unigram_levels, file = "df_trigram.RData")

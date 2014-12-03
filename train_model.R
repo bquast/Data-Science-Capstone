@@ -13,4 +13,4 @@ tri_naiveBayes <- naiveBayes( Y ~ X1 + X2 ,
                               df_trigram )
 
 # save the model
-save(tri_naiveBayes, file = "tri_naiveBayes.RData")
+save(tri_naiveBayes, unigram_levels, file = "tri_naiveBayes.RData")
